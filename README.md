@@ -13,7 +13,9 @@ dotnet new blazorwasm -o MyFirstBlazorApp --no-https --hosted
 cd MyFirstBlazorApp
 ```
 3. Run the project
+```cmd
 dotnet run
+```
 
 ## Exercise 2 - Databinding
 1. Open the SRA solution in the Exercise 2 folder
