@@ -8,7 +8,7 @@ Klaar om weggeblazord te worden?
 2. Open a command prompt and change directory to TacoBlazor
 3. Create a new blazer project
 
-dotnet new blazorwasm -o MyFirstBlazorApp --no-https --hosted
+`dotnet new blazorwasm -o MyFirstBlazorApp --no-https --hosted
 cd MyFirstBlazorApp`
 
 3. Run the project
@@ -19,20 +19,20 @@ dotnet run
 2. Open ExperimentTable in the Components folder of the Client project
 3. To display the name of the experiment, fill the binding statement inside the foreach loop
 
-@experiment.Name
+	@experiment.Name
 
 4. Then create a Title parameter inside the @code block where it states
 
-[Parameter]
-public string Title { get; set; }
+	[Parameter]
+	public string Title { get; set; }
 
 5. Show the parameter Title by putting a binding to the Title property inside the h3 tag on the top of the page.
 
-@Title
+	@Title
 
 6. Open the file Pages\Index.razor and show the ExperimentTable by adding
 
-<ExperimentTable Title="Experiments" />
+`<ExperimentTable Title="Experiments" />`
 
 7. Press F5 to run the project
 
@@ -46,14 +46,14 @@ public string Title { get; set; }
 
 4. Create a card that displays the title in the card header
 
-    <div class="card">
+    `<div class="card">
         <div class="card-header">
             @(PlateModel.Title)
         </div>
         <div class="card-body">
 		Body
         </div>
-    </div>
+    </div>`
 
 5. Put the Plate component on the Plates.razor component on the designated spot, be sure to bind the plate instance to the Plate component 
 
@@ -65,15 +65,15 @@ public string Title { get; set; }
 1. Open the SRA solution in the Exercise4 folder
 2. In Program.cs add the following line after the rootComponents.Add
 
-builder.Services.AddBlazoredModal();
+	builder.Services.AddBlazoredModal();
 
 3. Open Plates.Razor in the Components folder and add the following statement after the IPlateViewModel injection
 
-@inject IModalService modal
+	@inject IModalService modal
 
 4. Add the following parameter to the @code section
 
-[CascadingParameter] public IModalService Modal { get; set; }
+	[CascadingParameter] public IModalService Modal { get; set; }
 
 5. Add the following method to the @code section
 
