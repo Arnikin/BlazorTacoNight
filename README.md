@@ -6,13 +6,13 @@ Klaar om weggeblazord te worden?
 
 1. Create a folder called TacoBlazor
 2. Open a command prompt and change directory to TacoBlazor
-3. Create a new blazer project
+3. Create a new blazor project
 
 ```cmd
 dotnet new blazorwasm -o MyFirstBlazorApp --no-https --hosted
 cd MyFirstBlazorApp
 ```
-3. Run the project
+4. Open the .sln file in your new solution and hit [F5][1]
 ```cmd
 dotnet run
 ```
@@ -107,3 +107,5 @@ dotnet run
 	<button type="button" class="btn btn-primary" @onclick="() => Add()">Add experiment</button>
 ```
 7. Press F5 to run the solution
+
+[1]:https://www.youtube.com/watch?v=oHg5SJYRHA0
