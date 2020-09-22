@@ -8,8 +8,8 @@ Klaar om weggeblazord te worden?
 2. Open a command prompt and change directory to TacoBlazor
 3. Create a new blazer project
 
-`dotnet new blazorwasm -o MyFirstBlazorApp --no-https --hosted 
-`cd MyFirstBlazorApp
+`dotnet new blazorwasm -o MyFirstBlazorApp --no-https --hosted`
+cd MyFirstBlazorApp`
 
 3. Run the project
 dotnet run
