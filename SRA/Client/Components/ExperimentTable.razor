@@ -1,0 +1,94 @@
+﻿@using SRA.Client.Service
+@using SRA.Client.ViewModel
+
+@inject HttpClient http
+@inject IModalService ModalService
+@inject IExperimentsViewModel viewModel
+
+<h3>@Title</h3>
+
+@if (viewModel.Experiments == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th class="">Naam</th>
+                <th class="col-auto">&nbsp;</th>
+                <th class="col-auto">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var experiment in viewModel.Experiments)
+            {
+                <tr>
+                    <td class="col">
+                        @experiment.Name
+                    </td>
+                    <td class="col-auto">
+                        <button type="button" class="btn btn-primary" @onclick="() => Edit(experiment.Id)">Edit</button>
+                    </td>
+                    <td class="col-auto">
+                        <button type="button" class="btn btn-primary" @onclick="() => Delete(experiment.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+<div>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" @onclick="ShowModal">Add</button>
+</div>
+
+}
+
+@code {
+    [Parameter]
+    public string Title { get; set; }
+
+    [CascadingParameter] public IModalService Modal { get; set; }
+
+    async Task ShowModal()
+    {
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(ExperimentDetail.ExperimentId), Guid.Empty);
+        var modalForm = ModalService.Show<ExperimentDetail>("Add experiment", parameters);
+
+        var result = await modalForm.Result;
+
+    }
+
+
+    private void Add()
+    {
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(ExperimentDetail.ExperimentId), Guid.Empty);
+        ModalService.Show<ExperimentDetail>("Add experiment", parameters);
+    }
+
+    private void Delete(Guid id)
+    {
+        viewModel.DeleteExperiment(id);
+    }
+
+    protected override void OnInitialized()
+    {
+        viewModel.ModelUpdated += ModelUpdated;
+    }
+
+    private void ModelUpdated(object sender, EventArgs e)
+    {
+        base.StateHasChanged();
+    }
+
+    private void Edit(Guid id)
+    {
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(ExperimentDetail.ExperimentId), id);
+
+        ModalService.Show<ExperimentDetail>("Edit experiment", parameters);
+    }
+
+}

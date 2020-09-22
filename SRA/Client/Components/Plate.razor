@@ -1,0 +1,27 @@
+﻿@using SRA.Client.Models
+@using System.ComponentModel
+
+    <div class="card">
+        <div class="card-header">
+            @(PlateModel.Title)
+            @if (PlateModel.Experiment !=null)
+            {
+                <span class="badge badge-secondary">@PlateModel.Experiment.Name</span>
+            }
+        </div>
+        <div class="card-body">
+            @if (PlateModel.Experiment == null)
+            {
+                <p class="card-text">Free</p>
+            }
+            else
+            {
+        <p class="card-text">@(((DescriptionAttribute)Attribute.GetCustomAttribute(typeof(interval).GetField(Enum.GetName(typeof(interval), PlateModel.Experiment.MeasurementInterval)), typeof(DescriptionAttribute))).Description) @( PlateModel.Experiment.MeasurementSize) times</p>
+            }
+        </div>
+    </div>
+
+@code {
+    [Parameter]
+    public PlateModel PlateModel {get;set;}
+}

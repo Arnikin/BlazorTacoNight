@@ -1,0 +1,121 @@
+﻿@using SRA.Client.ViewModel
+@using SRA.Client.Models
+@inject IExperimentViewModel controller
+@inject IModalService ModalService
+
+<Wizard GoToNextStep="@controller.GoToNextStep"
+        GoToPreviousStep="@controller.GoToPreviousStep"
+        NextButtonDisabled="@controller.NextButtonDisabled"
+        PreviousButtonDisabled="@controller.PreviousButtonDisabled"
+        Progress="@controller.Progress">
+    <WizardInputCard CardHeader="Fill in the experiment name" CardText="" CardTitle="" CurrentStep="controller.Step" WizardStep="1">
+        <div class="form-group">
+            <label for="nameTextbox">Name</label>
+            <input id="nameTextbox" class="form-control" placeholder="Experiment name" type="text" @bind="controller.Name" @onblur="() => controller.SetName()" />
+        </div>
+    </WizardInputCard>
+    <WizardInputCard CardHeader="Experiment data" CardText="" CardTitle="" CurrentStep="controller.Step" WizardStep="2">
+        <div class="">
+            <div class="form-group">
+                <label for="sizeTexbox"># measurements</label>
+                <input id="sizeTextbox" class="form-control" type="number" @bind="controller.Size" @onblur="() => controller.SetSize()" />
+            </div>
+            <div class="form-group">
+                <label for="trayButtongroup">Tray</label>
+                <div id="trayButtongroup" class="btn-group btn-group-toggle form-control" data-toggle="buttons">
+                    @foreach (var size in controller.TraySizes)
+                    {
+                        <label class="btn btn-secondary form-check-label @(size.Id == controller.TraySize?"active":"")" @onclick="() => controller.SetTraySize(size.Id)">
+                            <input class="form-check-input" type="radio" name="options" id="@size.Title" autocomplete="off" checked="@(size.Id == controller.TraySize ? "checked" : "")" />
+                            @size.Title
+                        </label>
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="intervalButtongroup">Interval</label>
+                <div id="trayButtongroup" class="btn-group btn-group-toggle form-control" data-toggle="buttons">
+                    @foreach (var item in controller.MeasurementIntervals)
+                    {
+                        <label class="btn btn-secondary form-check-label @(item.Id==controller.MeasurementInterval?"active":"")" active="false" @onclick="() => controller.SetMeasurementInterval(item.Id)">
+                            <input class="form-check-input" type="radio" name="options" id="@item.Title" autocomplete="off" checked="@(item.Id==controller.MeasurementInterval?"checked":"")" >
+                            @item.Title
+                        </label>
+                    }
+                </div>
+            </div>
+        </div>
+    </WizardInputCard>
+    <WizardInputCard CardHeader="Select trays" CardText="" CardTitle="" CurrentStep="controller.Step" WizardStep="3">
+        <div class="container-fluid">
+            <div class="btn-group-toggle" data-toggle="buttons">
+                @foreach (var key in controller.PlateRows.Keys)
+                {
+                    <div class="row bg-light m-2">
+                        <div class="col">
+                            <div class="row m-2">
+                                <div class="col">Zone: @(key + 1)</div>
+                                @foreach (var plate in controller.PlateRows[key])
+                                {
+                                    <div class="col">
+                                        <button type="button" disabled="@(plate.IsDisabled)" class="btn @(plate.IsDisabled? "btn-primary": plate.IsSelected?"btn-success":"") btn-lg" data-toggle="button" aria-pressed="false" autocomplete="off" @onclick="@(() => controller.SetPlateSelected(key, plate.Number))">
+                                            @(plate.Title)
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </WizardInputCard>
+    <WizardInputCard CardHeader="Confirmation" CurrentStep="controller.Step" WizardStep="4">
+        <div class="input-group">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col">
+                        <label>Experiment: @(controller.Name)</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Size: @(controller.Size)</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class="btn btn-primary" @onclick="() => Confirm()">Confirm</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-primary" @onclick="BlazoredModal.Cancel">Cancel</button>
+                    </div>
+                </div>
+            </div>
+         </div>
+</WizardInputCard>
+</Wizard>
+
+@code {
+    [Parameter] public Guid ExperimentId { get; set; }
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; }
+
+    protected override void OnInitialized()
+    {
+        controller.SetExperiment(this.ExperimentId);
+
+        base.OnInitialized();
+    }
+
+    private void Confirm()
+    {
+        if (controller.Confirm()) BlazoredModal.Close(ModalResult.Ok(""));
+    }
+
+    private void Cancel()
+    {
+        controller.Cancel();
+        BlazoredModal.Cancel();
+    }
+
+}

@@ -1,0 +1,54 @@
+﻿@using SRA.Client.Service
+@using SRA.Client.ViewModel
+
+@inject HttpClient http
+@inject IModalService ModalService
+@inject IExperimentsViewModel viewModel
+
+<h3>@Title</h3>
+
+@if (viewModel.Experiments == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th class="">Naam</th>
+                <th class="col-auto">&nbsp;</th>
+                <th class="col-auto">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var experiment in viewModel.Experiments)
+            {
+                <tr>
+                    <td class="col">
+                        @experiment.Name
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+@code {
+    [Parameter]
+    public string Title { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+        viewModel.ModelUpdated += ModelUpdated;
+    }
+
+    private void ModelUpdated(object sender, EventArgs e)
+    {
+        base.StateHasChanged();
+    }
+
+
+}

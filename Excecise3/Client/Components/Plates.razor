@@ -1,0 +1,38 @@
+﻿
+@using SRA.Client.ViewModel
+@inject IPlateViewModel controller
+@inject IModalService modal
+
+<h3>Plates</h3>
+<div class="container-fluid">
+    @foreach (var key in controller.PlateRows.Keys)
+    {
+        <div class="row bg-light m-2">
+            <div class="col">
+                <div class="row m-2">
+                    <div class="col">Zone: @(key + 1)</div>
+                    @foreach (var plate in controller.PlateRows[key])
+                    {
+                        <div class="col">
+                            @* Put the plate component here *@
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+ </div>
+
+    @code {
+        protected override void OnInitialized()
+        {
+            controller.PlatesChanged += UpdateUI;
+            base.OnInitialized();
+        }
+
+        private void UpdateUI(object sender, EventArgs e)
+        {
+            base.StateHasChanged();
+        }
+
+    }
